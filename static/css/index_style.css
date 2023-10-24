@@ -1,0 +1,49 @@
+.courses-list {
+    display: flex;
+    justify-content: space-around; /* Distribute items evenly in the container */
+    flex-wrap: wrap; /* Wrap items to the next line if they don't fit */
+    list-style: none;
+}
+
+.course-item {
+    text-align: center;
+    width: 250px;
+    margin: 10px;
+}
+
+.course-item img {
+    width: 100%;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.course-item:hover img {
+    transform: translateY(-10px);
+}
+
+.units-list {
+    display: flex;
+    justify-content: space-around; /* Distribute items evenly in the container */
+    flex-wrap: wrap; /* Wrap items to the next line if they don't fit */
+    list-style: none;
+}
+
+.unit-item {
+    text-align: center;
+    width: 250px;
+    margin: 10px;
+}
+
+.unit-item img {
+    width: 100%;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.unit-item:hover img {
+    transform: translateY(-10px);
+}
+
+a {
+    color: #383838;
+}
