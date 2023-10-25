@@ -1,0 +1,19 @@
+ul {
+    list-style: none;
+}
+
+.section {
+    margin: 0 auto;
+    width: 80%;
+}
+
+img {
+    display: block;
+    margin: 0 auto;
+}
+
+#show-div {
+    top: 0;
+    left: 0;
+    margin-left: 23%;
+}

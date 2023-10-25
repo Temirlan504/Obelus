@@ -21,7 +21,7 @@
         <ul class="units-list">
             {% for unit in units %}
                 <li class="unit-item">
-                    <a href="#">
+                    <a href="{{ url_for('unit_detailed', unit_id=unit.id) }}">
                         <figure>
                             <img 
                                 src="{{ url_for('static', filename=unit.image_file)}}"

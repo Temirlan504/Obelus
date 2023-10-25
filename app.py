@@ -3,14 +3,16 @@ from flask import (
     render_template,
     request,
     redirect,
-    url_for,
+    url_for
 )
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from os import path
 
 app = Flask(__name__)
 
 db = SQLAlchemy()
+migrate = Migrate(app, db)
 DB_NAME = "site.db"
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
 db.init_app(app)
@@ -33,7 +35,8 @@ class Course(db.Model):
     units = db.relationship(
         'Unit',
         backref='course',
-        lazy=True
+        lazy=True,
+        cascade="all,delete"
     )
 
 
@@ -57,6 +60,39 @@ class Unit(db.Model):
         db.ForeignKey('course.id'),
         nullable=False
     )
+    sections = db.relationship(
+        'Section',
+        backref='unit',
+        lazy=True,
+        cascade="all,delete"
+    )
+
+
+class Section(db.Model):
+    def __init__(self, section_name, content, image_file, unit_id):
+        self.section_name = section_name
+        self.content = content
+        self.image_file = image_file
+        self.unit_id = unit_id
+
+    id = db.Column(db.Integer, primary_key=True)
+    section_name = db.Column(
+        db.String(50),
+        nullable=False
+    )
+    content = db.Column(
+        db.String(1000),
+        nullable=False
+    )
+    image_file = db.Column(
+        db.String(20),
+        nullable=True
+    )
+    unit_id = db.Column(
+        db.Integer,
+        db.ForeignKey('unit.id'),
+        nullable=False
+    )
 
 
 # Home page (Courses page)
@@ -75,6 +111,16 @@ def units(course_id):
         "units.html",
         course=Course.query.get_or_404(course_id),
         units=Unit.query.filter_by(course_id=course_id).all()
+    )
+
+
+# Sections page by unit id
+@app.route("/unit-detailed/<int:unit_id>")
+def unit_detailed(unit_id):
+    return render_template(
+        "unit_detailed.html",
+        unit=Unit.query.get_or_404(unit_id),
+        sections=Section.query.filter_by(unit_id=unit_id).all()
     )
 
 
@@ -145,7 +191,46 @@ def delete_unit(unit_id):
     return redirect(url_for('admin_add_units', course_id=unit.course_id))
 
 
-# Create database (or update it)
+# Admin panel for sections (add sections)
+@app.route('/admin_add_sections/<int:unit_id>', methods=['GET', 'POST'])
+def admin_add_sections(unit_id):
+    unit = Unit.query.get_or_404(unit_id)
+    if request.method == 'POST':
+        section_name = request.form.get('section_name')
+        content = request.form.get('section_content')
+        image_file = request.form.get('image_file')
+
+        new_section = Section(
+            section_name=section_name,
+            content=content,
+            image_file=image_file,
+            unit_id=unit_id
+        )
+        db.session.add(new_section)
+        db.session.commit()
+
+        return redirect(url_for('admin_add_sections', unit_id=unit_id))
+
+    return render_template(
+        'admin_add_sections.html',
+        sections=Section.query.filter_by(unit_id=unit_id).all(),
+        unit_id=unit_id,
+        unit=unit
+    )
+
+
+# Route for deleting sections
+@app.route('/delete_section/<int:section_id>', methods=['POST'])
+def delete_section(section_id):
+    section = Section.query.get_or_404(section_id)
+    
+    db.session.delete(section)
+    db.session.commit()
+    
+    return redirect(url_for('admin_add_sections', unit_id=section.unit_id))
+
+
+# Create database
 # def create_database(app):
 #     if not path.exists('/' + DB_NAME):
 #         with app.app_context():
