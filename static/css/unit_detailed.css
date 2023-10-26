@@ -3,17 +3,59 @@ ul {
 }
 
 .section {
-    margin: 0 auto;
+    margin: 0 auto 50px auto;
     width: 80%;
 }
 
-img {
+.section-image {
+    max-width: 100%; 
+    height: auto;
+}
+
+/* For inline images */
+.image-inline {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 20px;
+}
+
+/* For block images */
+.image-block {
     display: block;
-    margin: 0 auto;
+    margin: 20px 0;
+}
+
+.container {
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;  /* Horizontally centers children if the children's width is less than the container's width */
+    justify-content: center;  /* Vertically centers children if the children's height is less than the container's height */
+    width: 100%;  /* Takes the full width of the parent element */
 }
 
 #show-div {
+    text-align: left;
+    display: block;
+    margin: 0 0 100px 360px; /* Adding a little margin for spacing */
+}
+
+/* Scroll indicator */
+.progress-container {
+    width: 100%;
+    height: 8px;
+    background: #ccc;
+}
+  
+.progress-bar {
+    height: 8px;
+    background: #04AA6D;
+    width: 0%;
+}
+
+.navigation-bar {
+    position: sticky;
     top: 0;
-    left: 0;
-    margin-left: 23%;
+    z-index: 100;
+    margin-bottom: 50px;
 }
