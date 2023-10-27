@@ -47,9 +47,9 @@ ul {
     background: #ccc;
 }
   
-.progress-bar {
+#myBar {
     height: 8px;
-    background: #04AA6D;
+    background: #19a7ff;
     width: 0%;
 }
 
