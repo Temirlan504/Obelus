@@ -1,17 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // Adjust image layout based on the width of the image
-    function adjustImageLayout(imgElement) {
-        const maxWidthInline = 250; // Change this value based on your preference
-        if (imgElement.width > maxWidthInline) {
-            imgElement.parentElement.classList.add('image-block');
-        } else {
-            imgElement.parentElement.classList.add('image-inline');
-        }
-    }
-
+    // Progress bar
     const sections = document.querySelectorAll('.section');
     const progressBar = document.getElementById('myBar');
-    const showButton = document.getElementById('show-div');
     let currentSection = 0;
 
     if (sections.length > 0) {
@@ -25,6 +15,8 @@ document.addEventListener("DOMContentLoaded", function() {
         progressBar.style.width = progressPercentage + "%";
     }
 
+    // Function to show the next div after "Continue" is clicked
+    const continueButton = document.getElementById('show-div');
     function showDiv() {
         if (currentSection < sections.length) {
             sections[currentSection].style.display = "block";
@@ -34,20 +26,12 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     
         if (currentSection === sections.length) {
-            showButton.style.display = "none";
+            continueButton.style.display = "none";
         }
     }
-    
 
-    // Add an event listener for the button
-    if (showButton) {
-        showButton.addEventListener('click', showDiv);
+    // Add an event listener for the button "continue"
+    if (continueButton) {
+        continueButton.addEventListener('click', showDiv);
     }
-
-    let images = document.querySelectorAll('.section-image');
-    images.forEach(img => {
-        img.onload = function() {
-            adjustImageLayout(img);
-        };
-    });
 });
